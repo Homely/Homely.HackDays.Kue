@@ -3,17 +3,26 @@ const urls = {
   1: { url: '/basic', title: 'Basic' },
   2: { url: '/intense', title: 'Blocking' },
   3: { url: '/intense-fork', title: 'Forked' },
+  4: { url: '/intense-kue', title: 'Kue-d' },
 };
 
 const count = {
   1: { cnt: 0, tot: 0 },
   2: { cnt: 0, tot: 0 },
   3: { cnt: 0, tot: 0 },
+  4: { cnt: 0, tot: 0 },
 };
 
 const toggle = (cnt) => {
   const doit = document.getElementById(`chk${cnt}`);
-  doit.checked = !doit.checked;
+  const checked = !doit.checked;
+  doit.checked = checked;
+  setTitle(checked, cnt);
+}
+
+const setTitle = (checked, cnt) => {
+  const title = document.getElementById(`pageTitle${cnt}`);
+  title.innerHTML = `${checked ? '😀' : '😴'} ${urls[cnt].title}`;
 }
 
 const runner = (cnt) => {
@@ -24,12 +33,10 @@ const runner = (cnt) => {
   const title = document.getElementById(`pageTitle${cnt}`);
   const timer = document.getElementById(`timer${cnt}`);
 
+  setTitle(doit.checked, cnt);
   if (!doit.checked) {
-    title.innerHTML = `😴 ${urls[cnt].title}`;
     setTimeout(() => runner(cnt), 1000);
     return;
-  } else {
-    title.innerHTML = `😀 ${urls[cnt].title}`;
   }
   container.src = urls[cnt].url;
   container.onload = () => {
@@ -45,7 +52,7 @@ const runner = (cnt) => {
 }
 
 window.onload = () => {
-  runner(1);
-  runner(2);
-  runner(3);
+  [1,2,3,4].forEach((cnt) => {
+    runner(cnt);
+  });
 }
