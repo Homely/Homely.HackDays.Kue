@@ -11,6 +11,11 @@ const count = {
   3: { cnt: 0, tot: 0 },
 };
 
+const toggle = (cnt) => {
+  const doit = document.getElementById(`chk${cnt}`);
+  doit.checked = !doit.checked;
+}
+
 const runner = (cnt) => {
   const stopwatch = new Date().getTime();
   
@@ -19,11 +24,12 @@ const runner = (cnt) => {
   const title = document.getElementById(`pageTitle${cnt}`);
   const timer = document.getElementById(`timer${cnt}`);
 
-  title.innerHTML = urls[cnt].title;
   if (!doit.checked) {
-    title.innerHTML += ' (paused)';
+    title.innerHTML = `😴 ${urls[cnt].title}`;
     setTimeout(() => runner(cnt), 1000);
     return;
+  } else {
+    title.innerHTML = `😀 ${urls[cnt].title}`;
   }
   container.src = urls[cnt].url;
   container.onload = () => {
