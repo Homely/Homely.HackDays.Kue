@@ -16,9 +16,12 @@
   },
   "dependencies": {
     "babel-register": "^6.26.0",
+    "bull": "^3.5.2",
+    "bull-arena": "^2.5.1",
     "cls": "^0.1.5",
     "express": "4.16.4",
     "kue": "^0.11.6",
-    "statman-stopwatch": "^2.7.0"
+    "statman-stopwatch": "^2.7.0",
+    "url": "^0.11.0"
   }
 }

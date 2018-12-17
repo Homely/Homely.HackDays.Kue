@@ -4,6 +4,7 @@ const urls = {
   2: { url: '/intense', title: 'Blocking' },
   3: { url: '/intense-fork', title: 'Forked' },
   4: { url: '/intense-kue', title: 'Kue-d' },
+  5: { url: '/intense-bull', title: 'Bullied' },
 };
 
 const count = {
@@ -11,6 +12,7 @@ const count = {
   2: { cnt: 0, tot: 0 },
   3: { cnt: 0, tot: 0 },
   4: { cnt: 0, tot: 0 },
+  5: { cnt: 0, tot: 0 },
 };
 
 const toggle = (cnt) => {
@@ -52,7 +54,7 @@ const runner = (cnt) => {
 }
 
 window.onload = () => {
-  [1,2,3,4].forEach((cnt) => {
+  [1,2,3,4,5].forEach((cnt) => {
     runner(cnt);
   });
 }

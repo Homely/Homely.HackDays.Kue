@@ -1,7 +1,11 @@
 /* eslint-disable no-console */
 const express = require('express');
+const url = require('url');
 const kue = require('kue');
+const Arena = require('bull-arena');
 const { fork } = require('child_process');
+
+const { queues, NOTIFY_URL } = require('./queues');
 
 function msleep(n) {
   Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, n);
@@ -22,10 +26,21 @@ const iframeContent = (child) => {
 const app = express();
 const queue = kue.createQueue();
 
+// const getRedisConfig = (redisUrl) => {
+//   console.log('redisUrl', redisUrl);
+//   const redisConfig = url.parse(redisUrl);
+//   return {
+//     host: redisConfig.hostname || 'localhost',
+//     port: Number(redisConfig.port || 6379),
+//     database: (redisConfig.pathname || '/0').substr(1) || '0',
+//     password: redisConfig.auth ? redisConfig.auth.split(':')[1] : undefined,
+//   };
+// };
+
 app.use(express.static(`${__dirname}/`, { maxAge: 14400 }));
 app.get('/', (req, res) => {
   let containers = '';
-  [1,2,3,4].map((cnt) => {
+  [1,2,3,4,5].map((cnt) => {
     const bgColor = pastel();
     const checked = cnt === 1 ? 'checked' : '';
     const timer = `<div id="timer${cnt}"><div style="font-family: Courier New; margin: 10px 0 0">req:<br />avg:</div></div>`;
@@ -36,7 +51,7 @@ app.get('/', (req, res) => {
 });
 app.get('/basic', (req, res) => {
   res.send(iframeContent('❤️'));
-})
+});
 app.get('/intense', (req, res) => {
   sleep(5);
   res.send(iframeContent('🐌'));
@@ -67,4 +82,23 @@ app.get('/intense-kue', (req, res) => {
       });
     });
   });
+// app.get('/intense-bull', Arena(
+//   {
+//     queues: [
+//       {
+//         name: NOTIFY_URL,
+//         hostId: 'Worker',
+//         redis: getRedisConfig(process.env.REDIS_URL),
+//       },
+//     ],
+//   },
+//   {
+//     basePath: '/arena',
+//     disableListen: true,
+//   },
+// ));
+app.get('/intense-bull', (req, res) => {
+  res.send(iframeContent('🐂'));
+});
+
 app.listen(3000, () => console.log('Serving from http://localhost:3000!'));
